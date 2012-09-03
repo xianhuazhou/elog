@@ -1,7 +1,7 @@
 Introduction
 ------------
 
-elog can find specified error logs from your applications, web servers and any other text based log files, store them into [MongoDB](http://mongodb.org),you can access them via a simple web interface.
+elog can find specified error logs from your applications, web servers and any other text based log files, and store the logs into [MongoDB](http://mongodb.org). You can access the logs from MongoDB via a web interface with some filter options.
 
 Quick Start
 -----------
