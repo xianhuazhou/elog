@@ -1,21 +1,22 @@
 Introduction
 ------------
 
-elog can find specified error logs from your applications, web servers and any other text based log files, store them into MongoDB,you can access them via a simple web interface.
+elog can find specified error logs from your applications, web servers and any other text based log files, store them into [MongoDB](http://mongodb.org),you can access them via a simple web interface.
 
 Quick Start
 -----------
 
-Before you start, you need to install nodejs (&gt;= 0.8.8) and CoffeeScript (&gt;=1.3.3) in your Linux/Unix system, then:
+Before you start, you need to install [nodejs](http://nodejs.org) (&gt;= 0.8.8) and [CoffeeScript](http://coffeescript.org) (&gt;=1.3.3) in your Linux/Unix system, then:
 
 $ npm install elog (not ready yet :()
 
-elog contains elog-client and elog-server,  elog-client can find and push logs to elog-server via http requests, elog-server is a kind of web server with expressjs. 
+elog contains elog-client and elog-server,  elog-client can find and push logs to elog-server via http requests, elog-server is a kind of web server with [expressjs](http://expressjs.com). 
 
-*client settings: elog-client*
+**client settings: elog-client**
 
 It's a standard JSON file, You need to specify the log files for each app and api like below.
-/etc/elog/client.json:
+
+_/etc/elog/client.json_:
 
     {
         "apps": [
@@ -55,9 +56,9 @@ for each app, there are 5 parameters:
 
 Also, you need to define an api key and url like above, the api key is just a random string which need to match the server side api key settings.
 
-*server settings: elog-server*
+**server settings: elog-server**
 
-/etc/elog/server.json:
+_/etc/elog/server.json_:
 
     {
         "api_key": "mykey",
@@ -93,7 +94,8 @@ If something went wrong, you can check the log files you specified such as above
 Development & Test
 ------------------
 
-It's developed with CoffeeScript(nodejs), we are using mocha with should for the unit test.
+we are using mocha with should for the test, run test in elo directory:
+    $ mocha -r should --compilers coffee:coffee-script
 
 Known issues:
 * It doesn't work with logs with multiple bytes. 
