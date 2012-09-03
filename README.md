@@ -81,11 +81,11 @@ The server side settings is also a standand JSON file:
 * mongodb: mongodb related settings
 * title: title of elog homepage
 
-*start client*
+**start client**
     
     $ nohup elog-client /etc/elog/client.json > /var/log/elog-client.log
 
-*start server*
+**start server**
 
     $ nohup elog-server /etc/elog/server.json > /var/log/elog-server.log
 
