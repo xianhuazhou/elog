@@ -95,6 +95,7 @@ Development & Test
 ------------------
 
 we are using mocha with should for the test, run test in elo directory:
+
     $ mocha -r should --compilers coffee:coffee-script
 
 Known issues:
