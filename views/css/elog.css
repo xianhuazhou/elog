@@ -1,0 +1,50 @@
+body {
+    font-size: 12px;
+    color: black;
+}
+
+input {
+    width: 150px;
+}
+input.button {
+    width: 100px;
+}
+
+form {
+    margin: auto;
+    width: 98%;
+    margin-bottom: 5px;
+}
+table {
+  background: #ABAB9A;
+  margin: auto;
+  width: 98%;
+}
+table tr td {
+  background: #dddeee;
+}
+table tr th {
+  background: #CECECE;
+}
+
+table tr th.host { width: 8%; }
+table tr th.app { width: 8%; }
+table tr th.time { width: 12%; }
+table tr th.level { width: 4%; }
+table tr th.message { width: 68%; }
+
+tr.level4 td, tr.level3 td {
+  background: #EFEFEF;
+}
+tr.level2 td {
+  background: #FEFEFE;
+}
+tr.level1 td {
+  background: white;
+}
+
+#footer {
+    margin: 10px;
+    text-align: right;
+    color: gray;
+}

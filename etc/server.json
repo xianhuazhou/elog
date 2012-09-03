@@ -1,0 +1,14 @@
+{
+    "api_key": "mykey",
+    "http": {
+        "host": "localhost",
+        "port": 3339
+    },
+    "mongodb": {
+        "port": 27017,
+        "host": "localhost",
+        "database": "elog",
+        "collection": "logs"
+    },
+    "title": "elog"
+}

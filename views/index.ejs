@@ -1,0 +1,92 @@
+<%
+function showLevel(level) 
+{
+  switch(level) {
+    case 4:
+      return 'Fatal';
+    case 3:
+      return 'Error';
+    case 2:
+      return 'Warn';
+    case 1:
+      return 'Info';
+    case 0:
+      return 'Debug';
+    default:
+      return 'Unknown';
+  }
+}
+
+function showDate(date)
+{
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var hour = date.getHours();
+    var minute = date.getMinutes();
+    var second = date.getSeconds();
+
+    if (month < 10) month = '0' + month;
+    if (day < 10) day = '0' + day;
+    if (hour < 10) hour = '0' + hour;
+    if (minute < 10) minute = '0' + minute;
+    if (second < 10) second = '0' + second;
+
+    return [year, month, day].join('-') + ' ' +
+    [hour, minute, second].join(':');
+}
+
+var limitOptions = [10, 30, 50, 100, 200, 500, 1000, 2000, 10000];
+%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title><%= title %></title>
+        <link rel="stylesheet" media="all" type="text/css" href="/css/elog.css">
+    </head>
+    <body>
+        <h2>Logs list</h2>
+        <form action="/" method="get">
+           Show <select size="1" name="limit">
+            <% for (var i = 0; i < limitOptions.length; i++) { %>
+                <option value="<%= limitOptions[i] %>"><%= limitOptions[i] %></option>
+            <% } %>
+            </select> rows per page in 
+            <input type="text" name="apps" value="<%= currentApps %>" placeholder="Apps" title="mulitple apps can separate with ','"> and
+            <input type="text" name="hosts" value="<%= currentHosts %>" placeholder="Hosts" title="multiple hosts can separate with ','"> 
+            during <input type="text" name="startDate" value="<%= currentStartDate %>" placeholder="start date/time" title="Format: xxxx-xx-xx or xxxx-xx-xx hh:ss:mm"> and 
+            <input type="text" name="endDate" value="<%= currentEndDate %>" placeholder="end date/time" title="Format: xxxx-xx-xx or xxxx-xx-xx hh:ss:mm">
+            ,
+            <input type="submit" value="Filter Logs" class="button">
+           </select>
+        </form>
+        <table cellspacing="1" cellpadding="3">
+            <tr>
+                <th class="host">Host</th>
+                <th class="app">App</th>
+                <th class="time">Time</th>
+                <th class="level">Level</th>
+                <th class="message">Message</th>
+            </tr>
+            <% for (var i = 0; i < docs.length; i++) {  %> 
+                <% date = new Date(docs[i].time) %>
+                <tr class="level<%= docs[i].level %>">
+                    <td><%= docs[i].hostname %></td>
+                    <td><%= docs[i].app %></td>
+                    <td><%= showDate(date) %></td>
+                    <td><%= showLevel(docs[i].level) %></td>
+                    <td><%= docs[i].msg %></td>
+                </tr>
+            <% } %>
+        </table>
+        <div id="footer">
+           &copy;elog <%= new Date() %>
+        </div>
+        <script>
+            setTimeout(function(){
+                window.location.reload();
+            }, 50000);
+        </script>
+    </body>
+</html>

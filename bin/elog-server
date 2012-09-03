@@ -1,0 +1,11 @@
+#!/usr/bin/env coffee
+elog = require(__dirname + '/../lib/elog.coffee').elog
+
+unless process.argv[2]
+  console.log "Usage: coffee server.coffee /path/to/server/config.json"
+  process.exit 1
+
+config = require process.argv[2]
+
+server = new elog.server(config, elog.db)
+server.run()

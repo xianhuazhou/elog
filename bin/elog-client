@@ -1,0 +1,52 @@
+#!/usr/bin/env coffee
+elog = require(__dirname + '/../lib/elog.coffee').elog
+fs = require 'fs'
+os = require 'os'
+
+TMP_POSITION_FILE = "elog.positions.json"
+positionFile = os.tmpDir() + "/#{TMP_POSITION_FILE}"
+
+unless process.argv[2]
+  console.log "usage: elog-client /path/to/your/client.json"
+  console.log "       elog-client reset-positions # reset all positions of logs"
+  console.log "       elog-client reload # reload configuration"
+  console.log "       kill -HUP `ps aux | grep elog-client | grep -v grep | awk '{print $2}'`  # reload configuration, same as above"
+  process.exit 1
+
+if process.argv[2] == 'reset-positions'
+  fs.unlinkSync positionFile
+  process.exit 0
+
+if process.argv[2] == 'reload'
+  exec = require('child_process').exec
+  exec("kill -HUP `ps aux | grep elog-client | grep -v grep | awk '{print $2}'`", (error, stdout, stderr) ->
+    console.log "Error: #{error}" if error
+    console.log "Reload elog-client finished."
+  )
+
+# load config
+config = require process.argv[2]
+
+# load positions of apps
+unless fs.existsSync positionFile
+  fs.writeFileSync positionFile, "{}"
+  positionData = {}
+else
+  positionData = require positionFile
+
+# run mclient
+mclient = null
+
+start = () ->
+  mclient = new elog.mclient(config, elog, positionFile, positionData)
+  mclient.run()
+
+reload = () ->
+  mclient.shutdown()
+  start()
+
+process.on 'SIGHUP', () ->
+  console.log "Reloading..."
+  reload()
+
+start()
