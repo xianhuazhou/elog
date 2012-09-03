@@ -13,8 +13,10 @@ $ npm install elog (not ready yet :()
 elog contains elog-client and elog-server,  elog-client can find and push logs to elog-server via http requests, elog-server is a kind of web server with expressjs. 
 
 *client settings: elog-client*
+
 It's a standard JSON file, You need to specify the log files for each app and api like below.
 /etc/elog/client.json:
+
     {
         "apps": [
             {
@@ -54,7 +56,9 @@ for each app, there are 5 parameters:
 Also, you need to define an api key and url like above, the api key is just a random string which need to match the server side api key settings.
 
 *server settings: elog-server*
+
 /etc/elog/server.json:
+
     {
         "api_key": "mykey",
         "http": {
