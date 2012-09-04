@@ -18,7 +18,7 @@
         "elog",
         "logs"
     ],
-    "repository": "url": "git://github.com/xianhuazhou/elog",
+    "repository": "git://github.com/xianhuazhou/elog",
     "bin": {
         "elog-client": "./bin/elog-client",
         "elog-server": "./bin/elog-server"
