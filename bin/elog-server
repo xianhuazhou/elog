@@ -2,8 +2,8 @@
 elog = require(__dirname + '/../lib/elog.coffee').elog
 
 unless process.argv[2]
-  console.log "Usage: coffee server.coffee /path/to/server/config.json"
-  console.log "       coffee server.coffee reload # reload configuration"
+  console.log "Usage: elog-server /path/to/server/config.json"
+  console.log "       elog-server reload # reload configuration"
   process.exit 1
 
 elog.reload('elog-server') if process.argv[2] == 'reload'

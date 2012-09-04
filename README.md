@@ -1,16 +1,20 @@
 Introduction
 ------------
 
-elog can find specified error logs from your applications, web servers and any other text based log files, and store the logs into [MongoDB](http://mongodb.org). You can access the logs from MongoDB via a web interface with some filter options.
+elog can find and filter specified error logs from your applications, web servers and any other text based log files, store the logs into [MongoDB](http://mongodb.org). And you can access the logs from MongoDB via a web interface with some filter options.
+
+elog contains elog-client and elog-server,  elog-client can filter and push logs to elog-server via http requests, elog-server is a kind of web server with [expressjs](http://expressjs.com). 
 
 Quick Start
 -----------
 
-Before you start, you need to install [nodejs](http://nodejs.org) (&gt;= 0.8.8) and [CoffeeScript](http://coffeescript.org) (&gt;=1.3.3) in your Linux/Unix system, then:
+## Installation
+
+Before you start, you need to install [nodejs](http://nodejs.org) (&gt;= 0.8.8) and [CoffeeScript](http://coffeescript.org) (&gt;=1.3.3) in your Linux/Unix system, then install elog:
 
     $ [sudo] npm -g install elog
 
-elog contains elog-client and elog-server,  elog-client can find and push logs to elog-server via http requests, elog-server is a kind of web server with [expressjs](http://expressjs.com). 
+## Configuration: 
 
 **client settings: elog-client**
 
@@ -89,6 +93,8 @@ The server side settings is also a standand JSON file:
 * mongodb: mongodb related settings
 * web: web page related settings 
 
+## Run
+
 **start client**
     
     $ nohup elog-client /etc/elog/client.json > /var/log/elog-client.log &
@@ -98,6 +104,11 @@ The server side settings is also a standand JSON file:
     $ nohup elog-server /etc/elog/server.json > /var/log/elog-server.log &
 
 If something went wrong, you can check the log files you specified such as above. 
+
+**reload client or server**
+In case if you changed some configuration, we can reload the settings without shutdown the client or the server process, just reload it:
+    $ elog-server reload  # server side
+    $ elog-client reload  # client side
 
 Development & Test
 ------------------
