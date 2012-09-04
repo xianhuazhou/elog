@@ -64,18 +64,18 @@ var limitOptions = [10, 30, 50, 100, 200, 500, 1000, 2000, 10000];
         </form>
         <table cellspacing="1" cellpadding="3">
             <tr>
+                <th class="time">Time</th>
                 <th class="host">Host</th>
                 <th class="app">App</th>
-                <th class="time">Time</th>
                 <th class="level">Level</th>
                 <th class="message">Message</th>
             </tr>
             <% for (var i = 0; i < docs.length; i++) {  %> 
                 <% date = new Date(docs[i].time) %>
                 <tr class="level<%= docs[i].level %>">
+                    <td><%= showDate(date) %></td>
                     <td><%= docs[i].hostname %></td>
                     <td><%= docs[i].app %></td>
-                    <td><%= showDate(date) %></td>
                     <td><%= showLevel(docs[i].level) %></td>
                     <td><%= docs[i].msg %></td>
                 </tr>
@@ -86,8 +86,8 @@ var limitOptions = [10, 30, 50, 100, 200, 500, 1000, 2000, 10000];
         </div>
         <script>
             setTimeout(function(){
-                window.location.reload();
-            }, 50000);
+                window.location.reload(true);
+            }, <%= refreshTime %>);
         </script>
     </body>
 </html>

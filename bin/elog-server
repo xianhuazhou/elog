@@ -3,9 +3,29 @@ elog = require(__dirname + '/../lib/elog.coffee').elog
 
 unless process.argv[2]
   console.log "Usage: coffee server.coffee /path/to/server/config.json"
+  console.log "       coffee server.coffee reload # reload configuration"
   process.exit 1
 
-config = require process.argv[2]
+elog.reload('elog-server') if process.argv[2] == 'reload'
 
-server = new elog.server(config, elog.db)
-server.run()
+configFile = process.argv[2]
+
+# run server
+server = null
+
+start = () ->
+  console.log "Starting elog-server."
+  server = new elog.server(require(configFile, true), elog.db)
+  server.run()
+
+reload = () ->
+  server.shutdown()
+  server = null
+  delete require.cache[configFile]
+  start()
+
+process.on 'SIGHUP', () ->
+  console.log "Reloading elog-server."
+  reload()
+
+start()

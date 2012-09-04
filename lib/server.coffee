@@ -3,8 +3,6 @@ util = require 'util'
 ejs = require 'ejs'
 utils = require('./utils.coffee').utils
 
-LIMIT_PER_PAGE = 200
-
 # a simple web server of elog working with MongoDB
 class Server
   constructor: (@config, db) ->
@@ -29,9 +27,10 @@ class Server
     app.use express.bodyParser()
 
     app.get '/', (req, res) ->
+      webConfig = app.get('config').web
       query = req.query
       res.set('Content-Type', 'text/html; charset=UTF-8')
-      limit = query.limit || LIMIT_PER_PAGE
+      limit = query.limit || webConfig.limit_per_page
       apps = query.apps || ''
       hosts = query.hosts || ''
       startDate = query.startDate || ''
@@ -54,12 +53,13 @@ class Server
       app.get('db').find(conditions).sort({time: -1}).limit(+limit).toArray (err, docs) ->
         res.render 'index', {
           docs: docs,
-          title: app.get('config').title || 'elog homepage',
+          title: webConfig.title || 'elog homepage',
           currentLimit: limit,
           currentApps: apps,
           currentHosts: hosts,
           currentStartDate: startDate,
-          currentEndDate: endDate
+          currentEndDate: endDate,
+          refreshTime: webConfig.refresh_time
         }
 
     app.post '/api/:api_key', (req, res) ->
@@ -73,6 +73,11 @@ class Server
       res.send "OK"
 
     console.log "elog-server is running at #{@config.http.port}"
-    app.listen @config.http.port, @config.http.host
+    @app = app.listen(@config.http.port, @config.http.host)
+
+  shutdown: () ->
+    console.log "Closing server."
+    @app.close()
+    @app = null
 
 exports.server = Server

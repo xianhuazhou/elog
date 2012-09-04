@@ -10,5 +10,9 @@
         "database": "elog",
         "collection": "logs"
     },
-    "title": "elog"
+    "web": {
+        "title": "elog",
+        "limit_per_page": 100,
+        "refresh_time": 10000
+    }
 }
