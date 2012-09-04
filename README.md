@@ -107,6 +107,7 @@ If something went wrong, you can check the log files you specified such as above
 
 **reload client or server**
 In case if you changed some configuration, we can reload the settings without shutdown the client or the server process, just reload it:
+
     $ elog-server reload  # server side
     $ elog-client reload  # client side
 
