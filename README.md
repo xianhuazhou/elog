@@ -18,6 +18,7 @@ It's a standard JSON file, You need to specify the log files for each app and ap
 
 _/etc/elog/client.json_:
 
+```js
     {
         "apps": [
             {
@@ -46,6 +47,7 @@ _/etc/elog/client.json_:
             "url": "http://localhost:3339/api"
         }
     }
+```
 
 for each app, there are 5 parameters:
 * name: name of your app, (Note: don't put comma ',' in it')
@@ -60,34 +62,40 @@ Also, you need to define an api key and url like above, the api key is just a ra
 
 _/etc/elog/server.json_:
 
-    {
-        "api_key": "mykey",
-        "http": {
-            "host": "localhost",
-            "port": 3339
-        },
-        "mongodb": {
-            "port": 27017,
-            "host": "localhost",
-            "database": "elog",
-            "collection": "logs"
-        },
-        "title": "elog"
+```js
+{
+    "api_key": "mykey",
+    "http": {
+        "host": "localhost",
+        "port": 3339
+    },
+    "mongodb": {
+        "port": 27017,
+        "host": "localhost",
+        "database": "elog",
+        "collection": "logs"
+    },
+    "web": {
+        "title": "elog",
+        "limit_per_page": 100,
+        "refresh_time": 10000
     }
+}
+```
 
 The server side settings is also a standand JSON file:
 * api\_key: api key for the authentication, elog-client should send the same api key to match this one when push logs.
 * http: define a host and port to start a web server. 
 * mongodb: mongodb related settings
-* title: title of elog homepage
+* web: web page related settings 
 
 **start client**
     
-    $ nohup elog-client /etc/elog/client.json > /var/log/elog-client.log
+    $ nohup elog-client /etc/elog/client.json > /var/log/elog-client.log &
 
 **start server**
 
-    $ nohup elog-server /etc/elog/server.json > /var/log/elog-server.log
+    $ nohup elog-server /etc/elog/server.json > /var/log/elog-server.log &
 
 If something went wrong, you can check the log files you specified such as above. 
 
