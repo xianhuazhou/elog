@@ -8,13 +8,13 @@ elog contains elog-client and elog-server,  elog-client can filter and push logs
 Quick Start
 -----------
 
-## Installation
+### Installation
 
 Before you start, you need to install [nodejs](http://nodejs.org) (&gt;= 0.8.8) and [CoffeeScript](http://coffeescript.org) (&gt;=1.3.3) in your Linux/Unix system, then install elog:
 
     $ [sudo] npm -g install elog
 
-## Configuration: 
+### Configuration: 
 
 **client settings: elog-client**
 
@@ -93,7 +93,7 @@ The server side settings is also a standand JSON file:
 * mongodb: mongodb related settings
 * web: web page related settings 
 
-## Run
+### Run
 
 **start client**
     
