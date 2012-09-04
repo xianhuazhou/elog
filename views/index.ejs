@@ -1,43 +1,4 @@
-<%
-function showLevel(level) 
-{
-  switch(level) {
-    case 4:
-      return 'Fatal';
-    case 3:
-      return 'Error';
-    case 2:
-      return 'Warn';
-    case 1:
-      return 'Info';
-    case 0:
-      return 'Debug';
-    default:
-      return 'Unknown';
-  }
-}
-
-function showDate(date)
-{
-    var year = date.getFullYear();
-    var month = date.getMonth() + 1;
-    var day = date.getDate();
-    var hour = date.getHours();
-    var minute = date.getMinutes();
-    var second = date.getSeconds();
-
-    if (month < 10) month = '0' + month;
-    if (day < 10) day = '0' + day;
-    if (hour < 10) hour = '0' + hour;
-    if (minute < 10) minute = '0' + minute;
-    if (second < 10) second = '0' + second;
-
-    return [year, month, day].join('-') + ' ' +
-    [hour, minute, second].join(':');
-}
-
-var limitOptions = [10, 30, 50, 100, 200, 500, 1000, 2000, 10000];
-%>
+<% var limitOptions = [10, 30, 50, 100, 200, 500, 1000, 2000, 10000]; %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -62,32 +23,27 @@ var limitOptions = [10, 30, 50, 100, 200, 500, 1000, 2000, 10000];
             <input type="submit" value="Filter Logs" class="button">
            </select>
         </form>
-        <table cellspacing="1" cellpadding="3">
-            <tr>
+        <table cellspacing="1" cellpadding="3" id="logs">
+            <tr id="logsHeader">
                 <th class="time">Time</th>
                 <th class="host">Host</th>
                 <th class="app">App</th>
                 <th class="level">Level</th>
                 <th class="message">Message</th>
-            </tr>
-            <% for (var i = 0; i < docs.length; i++) {  %> 
-                <% date = new Date(docs[i].time) %>
-                <tr class="level<%= docs[i].level %>">
-                    <td><%= showDate(date) %></td>
-                    <td><%= docs[i].hostname %></td>
-                    <td><%= docs[i].app %></td>
-                    <td><%= showLevel(docs[i].level) %></td>
-                    <td><%= docs[i].msg %></td>
-                </tr>
-            <% } %>
+            </tr> 
+            <% include logs %>
         </table>
         <div id="footer">
            &copy;elog <%= new Date() %>
         </div>
+        <script type="text/javascript" src="/js/jquery-1.8.1.min.js"></script>
+        <script type="text/javascript" src="/js/elog.js"></script>
         <script>
-            setTimeout(function(){
-                window.location.reload(true);
-            }, <%= refreshTime %>);
+            $(function(){
+                elog({
+                    refresh_time: <%= refreshTime %>
+                });
+            });
         </script>
     </body>
 </html>

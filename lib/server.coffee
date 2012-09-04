@@ -51,6 +51,7 @@ class Server
           conditions['time'] = {$lte: endDateObj.getTime()}
 
       app.get('db').find(conditions).sort({time: -1}).limit(+limit).toArray (err, docs) ->
+        console.log "[#{new Date()}] MongoDB error: #{err}" if err
         res.render 'index', {
           docs: docs,
           title: webConfig.title || 'elog homepage',
@@ -60,6 +61,14 @@ class Server
           currentStartDate: startDate,
           currentEndDate: endDate,
           refreshTime: webConfig.refresh_time
+        }
+
+    app.get '/newlogs', (req, res) ->
+      conditions = {time: {$gt: +req.query.time}}
+      app.get('db').find(conditions).sort({time: -1}).toArray (err, docs) ->
+        console.log "[#{new Date()}] MongoDB error: #{err}" if err
+        res.render 'logs', {
+          docs: docs,
         }
 
     app.post '/api/:api_key', (req, res) ->

@@ -1,12 +1,27 @@
 {
-  "name": "elog",
-  "description": "show errors from log files of php, nginx, apache etc.",
-  "version": "0.0.1",
-  "private": true,
-  "dependencies": {
-    "express": ">= 3.0.0rc4",
-    "mongodb": ">= 1.1.5",
-    "should": ">= 1.1.0",
-    "ejs": ">= 0.8.2"
-  }
+    "name": "elog",
+    "description": "show errors from log files of php, nginx, apache etc.",
+    "version": "0.0.1",
+    "author": {
+        "name": "Xianhua Zhou",
+        "email": "xianhua.zhou@gmail.com"
+    },
+    "dependencies": {
+        "express": ">= 3.0.0rc4",
+        "mongodb": ">= 1.1.5",
+        "ejs": ">= 0.8.2"
+    }
+    "devDependencies": {
+        "should": ">= 1.1.0",
+    },
+    "keywords": [
+        "elog",
+        "logs"
+    ],
+    "repository": "url": "git://github.com/xianhuazhou/elog",
+    "bin": {
+        "elog-client": "./bin/elog-client",
+        "elog-server": "./bin/elog-server"
+    },
+    "main": "./lib/elog.coffee"
 }

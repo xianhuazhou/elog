@@ -8,7 +8,7 @@ Quick Start
 
 Before you start, you need to install [nodejs](http://nodejs.org) (&gt;= 0.8.8) and [CoffeeScript](http://coffeescript.org) (&gt;=1.3.3) in your Linux/Unix system, then:
 
-$ npm install elog (not ready yet :()
+    $ [sudo] npm -g install elog
 
 elog contains elog-client and elog-server,  elog-client can find and push logs to elog-server via http requests, elog-server is a kind of web server with [expressjs](http://expressjs.com). 
 
