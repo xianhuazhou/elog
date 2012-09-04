@@ -1,7 +1,7 @@
 Introduction
 ------------
 
-elog can find and filter specified error logs from your applications, web servers and any other text based log files, store the logs into [MongoDB](http://mongodb.org). And you can access the logs from MongoDB via a web interface with some filter options.
+elog can find and filter specified error logs from your applications, web servers and any other text based log files, store the logs into [MongoDB](http://mongodb.org). Then you can access the logs from MongoDB via a web interface with some filter options.
 
 elog contains elog-client and elog-server,  elog-client can filter and push logs to elog-server via http requests, elog-server is a kind of web server with [expressjs](http://expressjs.com). 
 
@@ -103,7 +103,7 @@ The server side settings is also a standand JSON file:
 
     $ nohup elog-server /etc/elog/server.json > /var/log/elog-server.log &
 
-If something went wrong, you can check the log files you specified such as above. 
+If something went wrong, you can check the log files you specified such as above, otherwise, you can go and visit http://localhost:3339 to see error logs.
 
 **reload client or server**
 
@@ -122,3 +122,8 @@ we are using mocha with should for the test, run test in elo directory:
 Known issues:
 * It doesn't work with logs with multiple bytes. 
 * It only can process logs line by line.
+
+Tested Log files
+----------------
+
+* php, nginx and apache

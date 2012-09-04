@@ -31,14 +31,14 @@ class Server
       query = req.query
       res.set('Content-Type', 'text/html; charset=UTF-8')
       limit = query.limit || webConfig.limit_per_page
-      apps = query.apps || ''
-      hosts = query.hosts || ''
+      apps = query.apps || []
+      hosts = query.hosts || []
       startDate = query.startDate || ''
       endDate = query.endDate || ''
 
       conditions = {}
-      conditions['app'] = {$in: apps.split(/,\s*/)} if apps
-      conditions['hostname'] = {$in: hosts.split(/,\s*/)} if hosts
+      conditions['app'] = {$in: apps} if apps.length > 0
+      conditions['hostname'] = {$in: hosts} if hosts.length > 0
 
       if startDate
         startDateObj = new Date(startDate)
@@ -50,18 +50,28 @@ class Server
         if (utils.isValidDate(endDateObj))
           conditions['time'] = {$lte: endDateObj.getTime()}
 
-      app.get('db').find(conditions).sort({time: -1}).limit(+limit).toArray (err, docs) ->
+      db = app.get('db')
+      collection = db.getCollection()
+      collection.distinct 'hostname', (err, allHosts) ->
         console.log "[#{new Date()}] MongoDB error: #{err}" if err
-        res.render 'index', {
-          docs: docs,
-          title: webConfig.title || 'elog homepage',
-          currentLimit: limit,
-          currentApps: apps,
-          currentHosts: hosts,
-          currentStartDate: startDate,
-          currentEndDate: endDate,
-          refreshTime: webConfig.refresh_time
-        }
+
+        collection.distinct 'app', (err, allApps) ->
+          console.log "[#{new Date()}] MongoDB error: #{err}" if err
+
+          db.find(conditions).sort({time: -1}).limit(+limit).toArray (err, docs) ->
+            console.log "[#{new Date()}] MongoDB error: #{err}" if err
+            res.render 'index', {
+              docs: docs,
+              allApps: allApps,
+              allHosts: allHosts,
+              title: webConfig.title || 'elog homepage',
+              currentLimit: limit,
+              currentApps: apps,
+              currentHosts: hosts,
+              currentStartDate: startDate,
+              currentEndDate: endDate,
+              refreshTime: webConfig.refresh_time
+            }
 
     app.get '/newlogs', (req, res) ->
       conditions = {time: {$gt: +req.query.time}}

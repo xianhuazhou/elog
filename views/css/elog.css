@@ -48,3 +48,9 @@ tr.level1 td {
     text-align: right;
     color: gray;
 }
+
+option.title {
+  background: #9a9a9a;
+  font-weight: bold;
+  border-bottom: 1px solid gray;
+}
