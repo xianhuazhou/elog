@@ -50,7 +50,8 @@ var limitOptions = [10, 30, 50, 100, 200, 500, 1000, 2000, 10000];
         <form action="/" method="get">
            Show <select size="1" name="limit">
             <% for (var i = 0; i < limitOptions.length; i++) { %>
-                <option value="<%= limitOptions[i] %>"><%= limitOptions[i] %></option>
+                <% selected = limitOptions[i] == currentLimit ? ' selected="selected"' : '' %>
+                <option value="<%= limitOptions[i] %>"<%= selected %>><%= limitOptions[i] %></option>
             <% } %>
             </select> rows per page in 
             <input type="text" name="apps" value="<%= currentApps %>" placeholder="Apps" title="mulitple apps can separate with ','"> and
