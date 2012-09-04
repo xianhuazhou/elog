@@ -115,7 +115,7 @@ In case if you changed some configuration, we can reload the settings without sh
 Development & Test
 ------------------
 
-we are using mocha with should for the test, run test in elo directory:
+we are using mocha with should for the test, run test in the elog directory:
 
     $ mocha -r should --compilers coffee:coffee-script
 
