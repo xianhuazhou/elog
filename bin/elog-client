@@ -17,6 +17,7 @@ if process.argv[2] == 'reset-positions'
   process.exit 0
 
 elog.reload('elog-client') if process.argv[2] == 'reload' 
+elog.stop('elog-client') if process.argv[2] == 'stop'
 
 configFile = process.argv[2]
 

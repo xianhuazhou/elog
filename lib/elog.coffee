@@ -11,14 +11,21 @@ exports.elog = {
   server: require('./server.coffee').server,
   utils: require('./utils.coffee').utils
 
-  reload: (program) ->
-    console.log "Reloading #{program} ..."
+  kill: (program, opts = '', output) ->
     exec = require('child_process').exec
-    exec("kill -HUP `ps aux | grep #{program} | grep -v grep | awk '{print $2}'`", (error, stdout, stderr) ->
+    exec("kill #{opts} `ps -ef | grep #{program} | grep -v grep | awk '{print $2}'`", (error, stdout, stderr) ->
       if error
         console.log "Error: #{error}"
         process.exit 1
-      stdout.print "Reload #{program} finished.\n"
+      stdout.print output
     )
     process.exit 0
+
+  reload: (program) ->
+    console.log "Reloading #{program} ..."
+    this.kill program, '-HUP', "Reload #{program} finished.\n"
+
+  stop: (program) ->
+    console.log "Stopping #{program} ..."
+    this.kill program, '', "Stop #{program} finished.\n"
 }
