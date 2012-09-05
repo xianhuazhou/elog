@@ -74,7 +74,13 @@ class Server
             }
 
     app.get '/newlogs', (req, res) ->
-      conditions = {time: {$gt: +req.query.time}}
+      query = req.query
+      apps = query.apps || []
+      hosts = query.hosts || []
+      conditions = {}
+      conditions['app'] = {$in: apps} if apps.length > 0
+      conditions['hostname'] = {$in: hosts} if hosts.length > 0
+      conditions['time'] = {$gt: +req.query.time}
       app.get('db').find(conditions).sort({time: -1}).toArray (err, docs) ->
         console.log "[#{new Date()}] MongoDB error: #{err}" if err
         res.render 'logs', {

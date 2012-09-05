@@ -3,15 +3,23 @@ $(function() {
         return 0 + $('#logsHeader').next('tr').attr('data-rel');
     }
 
-    function updateLogs() {
-        $.get('/newlogs?time=' + getLatestTime(), function(res){
-            $('#logsHeader').after(res);
+    function updateLogs(options) {
+        data = {
+            'time': getLatestTime(),
+            'apps[]': options.current_apps,
+            'hosts[]': options.current_hosts
+        }
+        $.get('/newlogs', data, function(res){
+            res = $.trim(res);
+            if (res != '') {
+                $('#logsHeader').after(res);
+            }
         });
     }
 
     window.elog = function(options) {
         setInterval(function(){
-            updateLogs();
+            updateLogs(options);
         }, options.refresh_time);
     }
 });

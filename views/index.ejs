@@ -69,7 +69,9 @@
         <script>
             $(function(){
                 elog({
-                    refresh_time: <%= refreshTime %>
+                    refresh_time: <%= refreshTime %>,
+                    current_apps: <%- JSON.stringify(currentApps) %>,
+                    current_hosts: <%- JSON.stringify(currentHosts) %>
                 });
             });
         </script>
