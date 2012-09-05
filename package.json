@@ -1,7 +1,7 @@
 {
     "name": "elog",
-    "description": "show errors from log files of php, nginx, apache etc.",
-    "version": "0.0.1",
+    "description": "filter errors from text based log files such as php, nginx, apache etc.",
+    "version": "0.0.2",
     "author": {
         "name": "Xianhua Zhou",
         "email": "xianhua.zhou@gmail.com"
