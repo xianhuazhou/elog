@@ -125,6 +125,13 @@ In case if you changed some configuration, we can reload the settings without sh
     $ elog-server stop
     $ elog-client stop
 
+**run without parameters**
+
+    $ elog-server
+    $ elog-client
+    
+You can see all of available commands.
+
 ## Tips
 
 **JSON configuration check**

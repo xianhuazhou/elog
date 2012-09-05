@@ -18,8 +18,13 @@ class MClient
   # filter line by the given rules, 
   # return a log level if the line is matched by the rules 
   filterLine: (line, rules) ->
-    for exclude in rules.exclude
-      return null if this.createRegexp(exclude).test(line)
+    if rules.exclude
+      for exclude in rules.exclude
+        return null if this.createRegexp(exclude).test(line)
+
+    unless rules.include
+      console.log "[#{new Date()}] No \"include\" rules found."
+      process.exit -1
 
     for include in rules.include
       if this.createRegexp(include[0]).test(line)
