@@ -149,6 +149,11 @@ You can see all of available commands.
 
 Please check if the log file is exists or the current user has read permission to read the file.
 
+**Run client and server in different servers**
+
+You can run multiple elog-clients for each server which has log files to process, run one elog-server in one server to receive the requests from elog-clients.
+elog-server can also working with Nginx http proxy, it's just a normal HTTP server.
+
 Development & Test
 ------------------
 
