@@ -30,20 +30,26 @@ _/etc/elog/client.json_:
                 "file": "/tmp/php_errors.log",
                 "interval_time": 5000,
                 "position": 0,
-                "rules": [
-                    ["error", "LOG_ERROR"],
-                    ["Notice", "LOG_WARN"]
-                ]
+                "rules": {
+                    "include": [ 
+                        [["error", "i"], "LOG_ERROR"],
+                        ["Notice", "LOG_WARN"]
+                    ],
+                    "exclude": ["Primary script unknown"]
+                }
             },
             {
                 "name": "nginx",
                 "file": "/usr/local/nginx/logs/error.log",
                 "interval_time": 5000,
                 "position": 0,
-                "rules": [
-                    ["error", "LOG_ERROR"],
-                    ["alert", "LOG_WARN"]
-                ]
+                "rules": {
+                    "include": [
+                        ["error", "LOG_ERROR"],
+                        ["alert", "LOG_WARN"]
+                    ],
+                    "exclude": []
+                }
             }
         ],
         "api": {
@@ -58,7 +64,9 @@ for each app, there are 5 parameters:
 * file: log file path
 * interval\_time: every number of seconds to check new logs
 * position: read data from log file in the specified positon after elog-client is started
-* rules: define some rules to filter logs, it's an array, each element in the array contains 2 elements, the first one is a regular expression, the sedond one is log level (LOG\_FATAL, LOG\_ERROR, LOG\_WARN, LOG\_INFO, LOG\_DEBUG)
+* rules: define some rules to filter logs, it contains "include" and "exclude": 
+* rules['include'] it's an array, each element is also an array which contains 2 elements, the first one is for build regular expression, it could be a string or an array. The sedond parameter is log level (LOG\_FATAL, LOG\_ERROR, LOG\_WARN, LOG\_INFO, LOG\_DEBUG), logs will be processed if matched.
+* rules['exclude'] it's an array, logs will be excluded if matched any rules (regular expression) list here.
 
 Also, you need to define an api key and url like above, the api key is just a random string which need to match the server side api key settings.
 
@@ -111,6 +119,22 @@ In case if you changed some configuration, we can reload the settings without sh
 
     $ elog-server reload  # server side
     $ elog-client reload  # client side
+
+**stop client and server**
+
+    $ elog-server stop
+    $ elog-client stop
+
+## Tips
+
+**JSON configuration check**
+
+    $ node /etc/elog/client.json
+    No output if there is no errors.
+
+**Read log files failed**
+
+Please check if the log file is exists or the current user has read permission to read the file.
 
 Development & Test
 ------------------

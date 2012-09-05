@@ -6,16 +6,31 @@ express = require 'express'
 describe 'Client', ->
   describe 'functions', ->
 
-    file1 = path.join(__dirname, "data", "test.log")
+    file1 = path.join(__dirname, "data", "test1.log")
+    file2 = path.join(__dirname, "data", "test2.log")
     config = {
       'apps': [
         {
           'name': 'app name',
           'file': file1,
-          'rules': [
-            [/error/i, elog.LOG_ERROR],
-            [/info/i, elog.LOG_INFO]
-          ]
+          'rules': {
+            "include": [
+              ["error", 'LOG_ERROR'],
+              ["info", 'LOG_INFO']
+            ],
+            "exclude": []
+          }
+        },
+        {
+          'name': 'another app',
+          'file': file2,
+          'rules': {
+            "include": [
+              [["mysql error", "i"], 'LOG_ERROR'],
+              ["php error", 'LOG_ERROR']
+            ],
+            "exclude": ["ftp", "http"]
+          }
         }
       ],
       'api': {
@@ -30,10 +45,15 @@ describe 'Client', ->
       data += "[2012-03-06 11:22:22] error, message\n"
       data += "[2012-03-07 03:10:29] info, message"
       fs.writeFileSync(file1, data, "utf-8")
+
+      data = "[2012-03-04 11:11:22] mysql ERROR, message\n"
+      data += "[2012-03-04 11:11:22] mysql error with ftp protocal\n"
+      fs.writeFileSync(file2, data, "utf-8")
     )
 
     afterEach(->
       fs.unlinkSync file1
+      fs.unlinkSync file2
     )
 
     it 'should read a line from a specified position', ->
@@ -48,15 +68,18 @@ describe 'Client', ->
       line = client.readLineSync line_one.length + 1
       line.should.equal line_two
 
-    it 'can process lines with callback', ->
+    it 'can process lines with callback from mclient', ->
       client = new elog.client(config.apps[0])
+      mclient = new elog.mclient(config, elog, null, null)
 
       numberOfLines = client.process (line) ->
-        for rule in config.apps[0].rules
-          return rule[1] if rule[0].test(line)
-
-        null
+        mclient.filterLine line, config.apps[0].rules
       numberOfLines.should.equal 3
+
+      client = new elog.client(config.apps[1])
+      numberOfLines = client.process (line) ->
+        mclient.filterLine line, config.apps[1].rules
+      numberOfLines.should.equal 1
 
     it 'can do a real process', ->
       client = new elog.client(config.apps[0], config.api)

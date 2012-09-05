@@ -5,20 +5,26 @@
             "file": "/tmp/php_errors.log",
             "interval_time": 5000,
             "position": 0,
-            "rules": [
-                ["error", "LOG_ERROR"],
-                ["Notice", "LOG_WARN"]
-            ]
+            "rules": {
+                "include": [ 
+                    [["error", "i"], "LOG_ERROR"],
+                    ["Notice", "LOG_WARN"]
+                ],
+                "exclude": ["Primary script unknown"]
+            },
         },
         {
             "name": "nginx",
             "file": "/usr/local/nginx/logs/error.log",
             "interval_time": 5000,
             "position": 0,
-            "rules": [
-                ["error", "LOG_ERROR"],
-                ["alert", "LOG_WARN"]
-            ]
+            "rules": {
+                "include": [
+                    ["error", "LOG_ERROR"],
+                    ["alert", "LOG_WARN"]
+                ],
+                "exclude": [""]
+            }
         }
     ],
     "api": {
