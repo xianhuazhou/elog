@@ -65,8 +65,8 @@ for each app, there are 5 parameters:
 * interval\_time: every number of seconds to check new logs
 * position: read data from log file in the specified positon after elog-client is started
 * rules: define some rules to filter logs, it contains "include" and "exclude": 
-* rules['include'] it's an array, each element is also an array which contains 2 elements, the first one is for build regular expression, it could be a string or an array. The sedond parameter is log level (LOG\_FATAL, LOG\_ERROR, LOG\_WARN, LOG\_INFO, LOG\_DEBUG), logs will be processed if matched.
-* rules['exclude'] it's an array, logs will be excluded if matched any rules (regular expression) list here.
+* rules['include']: it's an array, each element is also an array which contains 2 elements, the first one is for build regular expression, it could be a string or an array. The sedond parameter is log level (LOG\_FATAL, LOG\_ERROR, LOG\_WARN, LOG\_INFO, LOG\_DEBUG), logs will be processed if matched.
+* rules['exclude']: it's an array, logs will be excluded if matched any rules (regular expression) list here.
 
 Also, you need to define an api key and url like above, the api key is just a random string which need to match the server side api key settings.
 
