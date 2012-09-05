@@ -1,3 +1,7 @@
+path = require 'path'
+fs = require 'fs'
+
+# main
 exports.elog = {
   LOG_FATAL: 4,
   LOG_ERROR: 3,
@@ -5,11 +9,22 @@ exports.elog = {
   LOG_INFO: 1,
   LOG_DEBUG: 0,
 
+  VERSION: "0.0.2",
+
   db: require('./db.coffee').db,
   client: require('./client.coffee').client,
   mclient: require('./mclient.coffee').mclient,
   server: require('./server.coffee').server,
-  utils: require('./utils.coffee').utils
+  utils: require('./utils.coffee').utils,
+
+  checkArgv: (argv, program) ->
+    this.reload(program) if argv is 'reload'
+    this.stop(program) if argv is 'stop'
+    this.showConfig(program) if argv is 'show-config'
+    this.showVersion() if argv is '-v' or argv is '--version'
+    if argv is 'reset-positions' and program is 'elog-client'
+      fs.unlinkSync positionFile
+      process.exit 0
 
   kill: (program, opts = '', output) ->
     exec = require('child_process').exec
@@ -28,4 +43,13 @@ exports.elog = {
   stop: (program) ->
     console.log "Stopping #{program} ..."
     this.kill program, '', "Stop #{program} finished.\n"
+
+  showVersion: () ->
+    console.log "version: %s", this.VERSION
+    process.exit 0
+
+  showConfig: (program) ->
+    configFile = path.join(__dirname, '..', 'etc', "#{program.split('-')[1]}.json")
+    console.log fs.readFileSync(configFile, 'utf8')
+    process.exit 0
 }

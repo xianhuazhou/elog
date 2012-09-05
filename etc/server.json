@@ -1,5 +1,5 @@
 {
-    "api_key": "mykey",
+    "api_key": "your-api-key",
     "http": {
         "host": "localhost",
         "port": 3339

@@ -28,7 +28,7 @@
         }
     ],
     "api": {
-        "key": "mykey",
+        "key": "your-api-key",
         "url": "http://localhost:3339/api"
     }
 }

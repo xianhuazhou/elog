@@ -2,15 +2,18 @@
 elog = require(__dirname + '/../lib/elog.coffee').elog
 
 unless process.argv[2]
-  console.log "Usage: elog-server /path/to/server/config.json"
+  console.log "elog-server can receive logs and store them into MongoDB, you can see the logs via web browsers."
+  console.log "e.g. http://localhost:3339"
+  console.log "Usage: elog-server /path/to/server/config.json # start elog-server"
   console.log "       elog-server reload # reload configuration"
   console.log "       elog-server stop # stop the current running process"
-  process.exit 1
+  console.log "       elog-server show-config # show the default configuration"
+  elog.showVersion() 
 
-elog.reload('elog-server') if process.argv[2] == 'reload'
-elog.stop('elog-server') if process.argv[2] == 'stop'
+argv2 = process.argv[2]
+elog.checkArgv argv2, 'elog-server'
 
-configFile = process.argv[2]
+configFile = argv2 
 
 # run server
 server = null

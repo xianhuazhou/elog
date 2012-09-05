@@ -7,17 +7,15 @@ TMP_POSITION_FILE = "elog.positions.json"
 positionFile = os.tmpDir() + "/#{TMP_POSITION_FILE}"
 
 unless process.argv[2]
-  console.log "usage: elog-client /path/to/your/client.json"
+  console.log "elog-client can filter logs and send them to elog-server."
+  console.log "usage: elog-client /path/to/your/client.json # start elog-client"
   console.log "       elog-client reset-positions # reset all positions of logs"
   console.log "       elog-client reload # reload configuration"
-  process.exit 1
+  console.log "       elog-client show-config # show the default configuration"
+  elog.showVersion() 
 
-if process.argv[2] == 'reset-positions'
-  fs.unlinkSync positionFile
-  process.exit 0
-
-elog.reload('elog-client') if process.argv[2] == 'reload' 
-elog.stop('elog-client') if process.argv[2] == 'stop'
+argv2 = process.argv[2]
+elog.checkArgv argv2, 'elog-client'
 
 configFile = process.argv[2]
 
