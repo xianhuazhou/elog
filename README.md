@@ -146,6 +146,7 @@ we are using mocha with should for the test, run test in the elog directory:
 Known issues:
 * It doesn't work with logs with multiple bytes. 
 * It only can process logs line by line.
+* It's only tested on linux/unix system, especially for the reload and stop commands.
 
 Tested Log files
 ----------------
