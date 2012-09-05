@@ -18,7 +18,7 @@ Before you start, you need to install [nodejs](http://nodejs.org) (&gt;= 0.8.8) 
 
 **client settings: elog-client**
 
-It's a standard JSON file, You need to specify the log files for each app and api like below.
+It's a standard JSON file, You need to specify 1 or more log files for each app and api like below.
 
 _/etc/elog/client.json_:
 
@@ -60,7 +60,7 @@ _/etc/elog/client.json_:
 ```
 
 for each app, there are 5 parameters:
-* name: name of your app, (Note: don't put comma ',' in it')
+* name: name of your app of the log file
 * file: log file path
 * interval\_time: every number of seconds to check new logs
 * position: read data from log file in the specified positon after elog-client is started
@@ -100,6 +100,12 @@ The server side settings is also a standand JSON file:
 * http: define a host and port to start a web server. 
 * mongodb: mongodb related settings
 * web: web page related settings 
+
+Actually, you can generate a default config file with the following commands:
+
+    # mkdir /etc/elog
+    # elog-server show-config > /etc/elog/server.json
+    # elog-client show-config > /etc/elog/client.json
 
 ### Run
 
