@@ -7,7 +7,8 @@ $(function() {
         data = {
             'time': getLatestTime(),
             'apps[]': options.current_apps,
-            'hosts[]': options.current_hosts
+            'hosts[]': options.current_hosts,
+            'levels[]': options.current_levels
         }
         $.get('/newlogs', data, function(res){
             res = $.trim(res);

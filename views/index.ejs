@@ -15,36 +15,9 @@
                 <option value="<%= limitOptions[i] %>"<%= selected %>><%= limitOptions[i] %></option>
             <% } %>
             </select> rows per page in 
-            <select size="<%= allApps.length + 1 %>" name="apps[]" multiple="multiple">
-              <option value="" class="title">Apps</option>
-              <% for (var i = 0; i < allApps.length; i++) { %>
-                <% 
-                var selected = '';
-                for (var j = 0; j < currentApps.length; j++) {
-                  if (currentApps[j] == allApps[i]) {
-                    selected = 'selected="selected"';
-                    break;
-                  }
-                }
-                %>
-                <option value="<%= allApps[i] %>"<%= selected %>><%= allApps[i] %></option>
-              <% } %>
-            </select> and
-            <select size="<%= allHosts.length + 1 %>" name="hosts[]" multiple="multiple">
-              <option value="" class="title">Hosts</option>
-              <% for (var i = 0; i < allHosts.length; i++) { %>
-                <% 
-                var selected = '';
-                for (var j = 0; j < currentHosts.length; j++) {
-                  if (currentHosts[j] == allHosts[i]) {
-                    selected = 'selected="selected"';
-                    break;
-                  }
-                }
-                %>
-                <option value="<%= allHosts[i] %>"<%= selected %>><%= allHosts[i] %></option>
-              <% } %>
-            </select>
+            <%= showSelectOptions('apps', allApps, currentApps) %> and
+            <%= showSelectOptions('hosts', allHosts, currentHosts) %> and
+            <%= showSelectOptions('levels', allLevels, currentLevels) %>
             during <input type="text" name="startDate" value="<%= currentStartDate %>" placeholder="start date/time" title="Format: xxxx-xx-xx or xxxx-xx-xx hh:ss:mm"> and 
             <input type="text" name="endDate" value="<%= currentEndDate %>" placeholder="end date/time" title="Format: xxxx-xx-xx or xxxx-xx-xx hh:ss:mm">
             ,

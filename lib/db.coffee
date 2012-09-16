@@ -8,6 +8,7 @@ class Db
       db.createCollection(@collection, (err, collection) ->
         collection.ensureIndex({hostname: 1})
         collection.ensureIndex({app: 1})
+        collection.ensureIndex({level: 1})
         collection.ensureIndex({time: -1})
       )
     @results = []

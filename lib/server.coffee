@@ -33,12 +33,14 @@ class Server
       limit = query.limit || webConfig.limit_per_page
       apps = query.apps || []
       hosts = query.hosts || []
+      levels = query.levels || []
       startDate = query.startDate || ''
       endDate = query.endDate || ''
 
       conditions = {}
       conditions['app'] = {$in: apps} if apps.length > 0
       conditions['hostname'] = {$in: hosts} if hosts.length > 0
+      conditions['level'] = {$in: levels} if levels.length > 0
 
       if startDate
         startDateObj = new Date(startDate)
@@ -55,31 +57,39 @@ class Server
       collection.distinct 'hostname', (err, allHosts) ->
         console.log "[#{new Date()}] MongoDB error: #{err}" if err
 
-        collection.distinct 'app', (err, allApps) ->
+        collection.distinct 'level', (err, allLevels) ->
           console.log "[#{new Date()}] MongoDB error: #{err}" if err
 
-          db.find(conditions).sort({time: -1}).limit(+limit).toArray (err, docs) ->
+          collection.distinct 'app', (err, allApps) ->
             console.log "[#{new Date()}] MongoDB error: #{err}" if err
-            res.render 'index', {
-              docs: docs,
-              allApps: allApps,
-              allHosts: allHosts,
-              title: webConfig.title || 'elog homepage',
-              currentLimit: limit,
-              currentApps: apps,
-              currentHosts: hosts,
-              currentStartDate: startDate,
-              currentEndDate: endDate,
-              refreshTime: webConfig.refresh_time
-            }
+
+            db.find(conditions).sort({time: -1}).limit(+limit).toArray (err, docs) ->
+              console.log "[#{new Date()}] MongoDB error: #{err}" if err
+              res.render 'index', {
+                docs: docs,
+                allApps: allApps,
+                allHosts: allHosts,
+                allLevels: allLevels,
+                title: webConfig.title || 'elog homepage',
+                currentLimit: limit,
+                currentApps: apps,
+                currentHosts: hosts,
+                showSelectOptions: utils.showSelectOptions,
+                currentLevels: levels,
+                currentStartDate: startDate,
+                currentEndDate: endDate,
+                refreshTime: webConfig.refresh_time
+              }
 
     app.get '/newlogs', (req, res) ->
       query = req.query
       apps = query.apps || []
       hosts = query.hosts || []
+      levels = query.levels || []
       conditions = {}
       conditions['app'] = {$in: apps} if apps.length > 0
       conditions['hostname'] = {$in: hosts} if hosts.length > 0
+      conditions['level'] = {$in: level} if levels.length > 0
       conditions['time'] = {$gt: +req.query.time}
       app.get('db').find(conditions).sort({time: -1}).toArray (err, docs) ->
         console.log "[#{new Date()}] MongoDB error: #{err}" if err
