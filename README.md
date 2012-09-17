@@ -161,6 +161,10 @@ we are using mocha with should for the test, run test in the elog directory:
 
     $ mocha -r should --compilers coffee:coffee-script
 
+or run it with [jake](https://github.com/mde/jake)
+
+    $ jake test
+
 Known issues:
 * It doesn't work with logs with multiple bytes. 
 * It only can process logs line by line.
