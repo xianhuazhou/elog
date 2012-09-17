@@ -5,31 +5,30 @@ utils = require('./utils.coffee').utils
 
 # a simple web server of elog working with MongoDB
 class Server
-  constructor: (@config, db) ->
-    @db = new db(
-      config.mongodb.host,
-      config.mongodb.port,
-      config.mongodb.database,
-      config.mongodb.collection
+  constructor: (@config, @db) ->
+    cfg = @config.mongodb
+    @myDB = new @db(
+      cfg.host,
+      cfg.port,
+      cfg.database,
+      cfg.collection
     )
 
   # run the web server
   run: () ->
     express = require 'express'
     app = express()
-    self = this
 
     # app config
     app.set('config', @config)
-    app.set('db', @db)
     app.set 'view engine', 'ejs'
     app.set 'views', __dirname + '/../views'
     app.use express.static(__dirname + '/../views')
     app.use express.bodyParser()
 
-    self.routeRoot app
-    self.routeNewlogs app
-    self.routeApi app
+    this.routeRoot app
+    this.routeNewlogs app
+    this.routeApi app
 
     console.log "elog-server is running at #{@config.http.port}"
     @app = app.listen(@config.http.port, @config.http.host)
@@ -81,19 +80,18 @@ class Server
       conditions = self.buildConditions query
 
       # fetch logs
-      db = app.get('db')
-      collection = db.getCollection()
+      collection = self.myDB.getCollection()
       collection.distinct 'hostname', (err, allHosts) ->
-        console.log "[#{new Date()}] MongoDB error: #{err}" if err
+        utils.dbError "#{err} [routeRoot:distinct#hostname]" if err
 
         collection.distinct 'level', (err, allLevels) ->
-          console.log "[#{new Date()}] MongoDB error: #{err}" if err
+          utils.dbError "#{err} [routeRoot:distinct#level]" if err
 
           collection.distinct 'app', (err, allApps) ->
-            console.log "[#{new Date()}] MongoDB error: #{err}" if err
+            utils.dbError "#{err} [routeRoot:distinct#app]" if err
 
-            db.find(conditions).sort({time: -1}).limit(+limit).toArray (err, docs) ->
-              console.log "[#{new Date()}] MongoDB error: #{err}" if err
+            collection.find(conditions).sort({time: -1}).limit(+limit).toArray (err, docs) ->
+              utils.dbError "#{err} [routeRoot:find]" if err
               res.render 'index', {
                 docs: docs,
                 allApps: allApps,
@@ -116,22 +114,22 @@ class Server
     self = this
     app.get '/newlogs', (req, res) ->
       conditions = self.buildConditions req.query
-      app.get('db').find(conditions).sort({time: -1}).toArray (err, docs) ->
-        console.log "[#{new Date()}] MongoDB error: #{err}" if err
+      self.myDB.find(conditions).sort({time: -1}).toArray (err, docs) ->
+        utils.dbError "#{err} [routeNewlogs]" if err
         res.render 'logs', {
           docs: docs,
           utils: utils
         }
 
   routeApi: (app) ->
+    self = this
     app.post '/api/:api_key', (req, res) ->
       res.set('Content-Type', 'text/plain')
       if req.params.api_key != app.get('config').api_key
         return res.send("KO")
 
       doc = JSON.parse(req.body.log)
-      console.log doc
-      app.get('db').insert doc
+      self.myDB.insert doc
       res.send "OK"
 
   shutdown: () ->

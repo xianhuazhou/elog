@@ -1,6 +1,6 @@
 utils = {
-  isValidDate: (date) -> date.getTime().toString() isnt 'NaN',
-  capitalize: (str) -> str.charAt(0).toUpperCase() + str.slice(1),
+  isValidDate: (date) -> date.getTime().toString() isnt 'NaN'
+  capitalize: (str) -> str.charAt(0).toUpperCase() + str.slice(1)
   showSelectOptions: (name, options, currentOptions, cb = null) ->
     html = '<select size="' + (options.length + 1) + '" name="' + name + '[]" multiple="multiple">
       <option value="" class="title">' + utils.capitalize(name) + '</option>'
@@ -19,7 +19,6 @@ utils = {
       html += "<option value=\"#{option}\"#{selected}>#{optionDisplay}</option>"
 
     html + "</select>"
-  ,
 
   getLevelById: (levelId) ->
     switch levelId
@@ -28,7 +27,6 @@ utils = {
       when 2 then 'Warning'
       when 1 then 'Info'
       when 0 then 'Debug'
-  ,
 
   showDate: (date) ->
     year = date.getFullYear()
@@ -46,6 +44,26 @@ utils = {
 
     return [year, month, day].join('-') + ' ' +
     [hour, minute, second].join(':')
+
+  md5: (str) ->
+    require('crypto').createHash('md5').update(str).digest('hex')
+
+  dbError: (errorInfo) ->
+    console.log "[#{new Date()}] MongoDB Error: #{errorInfo}"
+
+  timeRegs: () ->
+    [
+      /^\[(.+?)\]/, # php error logs
+      /^(.+?)\s+\[/, # nginx error logs
+      /\[(.+?)\]/ # nginx & apache access logs
+    ]
+
+  # trim line time
+  trimLineTime: (line) ->
+    for reg in utils.timeRegs()
+      line = line.replace(reg, '')
+
+    line
 }
 
 exports.utils = utils

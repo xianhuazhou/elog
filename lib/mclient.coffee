@@ -27,8 +27,7 @@ class MClient
       process.exit -1
 
     for include in rules.include
-      if this.createRegexp(include[0]).test(line)
-        return @elog[include[1]]
+      return @elog[include[1]] if this.createRegexp(include[0]).test(line)
 
     null
 
@@ -43,13 +42,14 @@ class MClient
       console.log "Processing #{app.name} at position #{position} ..."
       client = new elog.client(app, app.api || @config.api, position)
 
-      do (client) ->
+      do (client, app) ->
         $timers.push setInterval(() ->
           # don't process it if there is one is still running
           return if client.fd
 
           # process logs line by line
-          client.process((line) -> self.filterLine line, app.rules)
+          client.process (line) ->
+            self.filterLine line, app.rules
 
           positionData[client.app.name] = client.currentPosition
           fs.writeFileSync positionFile, JSON.stringify(positionData)

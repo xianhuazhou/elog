@@ -9,6 +9,7 @@ unless process.argv[2]
   console.log "       elog-server reload # reload configuration"
   console.log "       elog-server stop # stop the current running process"
   console.log "       elog-server show-config # show the default configuration"
+  console.log "       elog-server /path/to/server/config.json update# update your elog server settings"
   console.log ""
   elog.showVersion() 
 
@@ -16,6 +17,11 @@ argv2 = process.argv[2]
 elog.checkArgv argv2, 'elog-server'
 
 configFile = argv2 
+
+# update elog-server
+if process.argv[3] is 'update' 
+  elog.updateServer(require(configFile, true))
+  return
 
 # run server
 server = null

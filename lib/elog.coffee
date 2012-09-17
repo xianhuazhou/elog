@@ -36,6 +36,26 @@ exports.elog = {
     )
     process.exit 0
 
+  updateServer: (config) ->
+    console.log "Updating elog-server ..."
+    cfg = config.mongodb
+    utils = this.utils
+    myDB = new this.db(cfg.host, cfg.port, cfg.database, cfg.collection, false)
+    myDB.open (collection, db) ->
+      collection = db.collection(cfg.collection)
+      console.log "   >> updating indexes"
+      myDB.createIndexes()
+      collection.find().toArray (err, docs) ->
+        console.log "   >> updating dupids for show top X errors"
+        for doc in docs
+          return unless doc
+          updatedData = {dupid: utils.md5(utils.trimLineTime(doc.msg))}
+          collection.update({_id: doc._id}, {$set: updatedData})
+
+        console.log ""
+        console.log "elog-server has been updated."
+        process.exit 0
+
   reload: (program) ->
     console.log "Reloading #{program} ..."
     this.kill program, '-HUP', "Reload #{program} finished.\n"

@@ -2,6 +2,7 @@ fs = require 'fs'
 http = require 'http'
 querystring = require 'querystring'
 url = require 'url'
+utils = require('./utils.coffee').utils
   
 # "\n"
 LINE_BREAK = 10
@@ -58,13 +59,15 @@ class Client
 
   # push a log to elog server
   push: (level, time, line) ->
+    lineWithoutTime = utils.trimLineTime(line)
     params = {
-      '_id': this.md5(line),
+      '_id': utils.md5(line),
       'app': @app.name,
       'hostname': @hostname,
       'time': time,
       'msg': line,
-      'level': level
+      'level': level,
+      'dupid': utils.md5(lineWithoutTime)
     }
     log = JSON.stringify(params)
     data = querystring.stringify {"log": log}
@@ -88,16 +91,11 @@ class Client
       console.log "[#{new Date().toString()}] elog-server error: #{error}"
 
     hr.write data
-    hr.end()
+    hr.end() 
 
   # get time of one line log 
   getTimeOf: (line) ->
-    regs = [
-      /^\[(.+?)\]/, # php error logs
-      /^(.+?)\s+\[/, # nginx error logs
-      /\[(.+?)\]/ # nginx & apache access logs
-    ]
-    for reg in regs
+    for reg in utils.timeRegs()
       time = null
       matches = line.match(reg)
       if matches
@@ -106,8 +104,5 @@ class Client
         return time if time and time.toString() isnt "NaN"
 
     null
-
-  md5: (str) ->
-    require('crypto').createHash('md5').update(str).digest('hex')
 
 exports.client = Client
