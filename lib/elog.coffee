@@ -17,6 +17,14 @@ exports.elog = {
   server: require('./server.coffee').server,
   utils: require('./utils.coffee').utils,
 
+  getLevelById: (levelId) ->
+    switch levelId
+      when 4 then 'Fatal'
+      when 3 then 'Error'
+      when 2 then 'Warning'
+      when 1 then 'Info'
+      when 0 then 'Debug'
+
   checkArgv: (argv, program) ->
     this.reload(program) if argv is 'reload'
     this.stop(program) if argv is 'stop'

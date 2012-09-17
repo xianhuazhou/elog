@@ -27,3 +27,16 @@ describe 'Utils', ->
       name = 'ppa'
       utils.showSelectOptions(name, allApps, currentApps).should.include '<option value="App2" selected="selected">'
       utils.showSelectOptions(name, allApps, currentApps).should.include '>Ppa<'
+
+    it 'should work with callback', ->
+      allApps = [4, 3, 2, 1, 0]
+      currentApps = [3]
+      name = 'Level'
+      selectOptions = utils.showSelectOptions(name, allApps, currentApps, (levelId) ->
+        elog.getLevelById(levelId)
+      )
+      selectOptions.should.include '>Fatal<'
+      selectOptions.should.include '>Error<'
+      selectOptions.should.include '>Warning<'
+      selectOptions.should.include '>Info<'
+      selectOptions.should.include '>Debug<'

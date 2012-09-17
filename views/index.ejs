@@ -15,9 +15,9 @@
                 <option value="<%= limitOptions[i] %>"<%= selected %>><%= limitOptions[i] %></option>
             <% } %>
             </select> rows per page in 
-            <%= showSelectOptions('apps', allApps, currentApps) %> and
-            <%= showSelectOptions('hosts', allHosts, currentHosts) %> and
-            <%= showSelectOptions('levels', allLevels, currentLevels) %>
+            <%- showSelectOptions('apps', allApps, currentApps) %> and
+            <%- showSelectOptions('hosts', allHosts, currentHosts) %> and
+            <%- showSelectOptions('levels', allLevels, currentLevels) %>
             during <input type="text" name="startDate" value="<%= currentStartDate %>" placeholder="start date/time" title="Format: xxxx-xx-xx or xxxx-xx-xx hh:ss:mm"> and 
             <input type="text" name="endDate" value="<%= currentEndDate %>" placeholder="end date/time" title="Format: xxxx-xx-xx or xxxx-xx-xx hh:ss:mm">
             ,

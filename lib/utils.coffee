@@ -1,9 +1,9 @@
-exports.utils = {
+utils = {
   isValidDate: (date) -> date.getTime().toString() isnt 'NaN',
   capitalize: (str) -> str.charAt(0).toUpperCase() + str.slice(1),
-  showSelectOptions: (name, options, currentOptions) ->
+  showSelectOptions: (name, options, currentOptions, cb = null) ->
     html = '<select size="' + (options.length + 1) + '" name="' + name + '[]" multiple="multiple">
-      <option value="" class="title">' + this.capitalize(name) + '</option>'
+      <option value="" class="title">' + utils.capitalize(name) + '</option>'
     for option in options
       selected = ''
       for currentOption in currentOptions
@@ -11,7 +11,14 @@ exports.utils = {
           selected = ' selected="selected"'
           break
     
-      html += "<option value=\"#{option}\"#{selected}>#{option}</option>"
+      if cb is null
+        optionDisplay = option
+      else
+        optionDisplay = cb(option)
+
+      html += "<option value=\"#{option}\"#{selected}>#{optionDisplay}</option>"
 
     html + "</select>"
 }
+
+exports.utils = utils

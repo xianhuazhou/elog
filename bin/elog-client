@@ -9,9 +9,11 @@ positionFile = os.tmpDir() + "/#{TMP_POSITION_FILE}"
 unless process.argv[2]
   console.log "elog-client can filter logs and send them to elog-server."
   console.log "usage: elog-client /path/to/your/client.json # start elog-client"
+  console.log ""
   console.log "       elog-client reset-positions # reset all positions of logs"
   console.log "       elog-client reload # reload configuration"
   console.log "       elog-client show-config # show the default configuration"
+  console.log ""
   elog.showVersion() 
 
 argv2 = process.argv[2]
