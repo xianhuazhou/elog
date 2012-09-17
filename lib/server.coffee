@@ -17,6 +17,7 @@ class Server
   run: () ->
     express = require 'express'
     app = express()
+    self = this
 
     # app config
     app.set('config', @config)
@@ -26,32 +27,60 @@ class Server
     app.use express.static(__dirname + '/../views')
     app.use express.bodyParser()
 
+    self.routeRoot app
+    self.routeNewlogs app
+    self.routeApi app
+
+    console.log "elog-server is running at #{@config.http.port}"
+    @app = app.listen(@config.http.port, @config.http.host)
+
+  # build conditions from query params 
+  buildConditions: (query) ->
+    apps = this.queryApps(query)
+    hosts = this.queryHosts(query)
+    levels = this.queryLevels(query)
+
+    conditions = {}
+    conditions['app'] = {$in: apps} if apps.length > 0
+    conditions['hostname'] = {$in: hosts} if hosts.length > 0
+    conditions['level'] = {$in: levels} if levels.length > 0
+
+    if query.time
+      conditions['time'] = {$gt: +query.time}
+      return conditions
+
+    startDate = this.queryStartDate(query)
+    endDate = this.queryEndDate(query)
+
+    if startDate
+      startDateObj = new Date(startDate)
+      if (utils.isValidDate(startDateObj))
+        conditions['time'] = {$gte: startDateObj.getTime()}
+
+    if endDate
+      endDateObj = new Date(endDate)
+      if (utils.isValidDate(endDateObj))
+        conditions['time'] = {$lte: endDateObj.getTime()}
+
+    conditions
+
+  queryApps: (query) -> query.apps || []
+  queryHosts: (query) -> query.hosts || []
+  queryLevels: (query) -> (query.levels || []).map((it) -> +it)
+  queryStartDate: (query) -> query.startDate || ''
+  queryEndDate: (query) -> query.endDate || ''
+
+  routeRoot: (app) ->
+    self = this
     app.get '/', (req, res) ->
       webConfig = app.get('config').web
       query = req.query
       res.set('Content-Type', 'text/html; charset=UTF-8')
       limit = query.limit || webConfig.limit_per_page
-      apps = query.apps || []
-      hosts = query.hosts || []
-      levels = query.levels || []
-      startDate = query.startDate || ''
-      endDate = query.endDate || ''
 
-      conditions = {}
-      conditions['app'] = {$in: apps} if apps.length > 0
-      conditions['hostname'] = {$in: hosts} if hosts.length > 0
-      conditions['level'] = {$in: levels} if levels.length > 0
+      conditions = self.buildConditions query
 
-      if startDate
-        startDateObj = new Date(startDate)
-        if (utils.isValidDate(startDateObj))
-          conditions['time'] = {$gte: startDateObj.getTime()}
-
-      if endDate
-        endDateObj = new Date(endDate)
-        if (utils.isValidDate(endDateObj))
-          conditions['time'] = {$lte: endDateObj.getTime()}
-
+      # fetch logs
       db = app.get('db')
       collection = db.getCollection()
       collection.distinct 'hostname', (err, allHosts) ->
@@ -72,31 +101,29 @@ class Server
                 allLevels: allLevels,
                 title: webConfig.title || 'elog homepage',
                 currentLimit: limit,
-                currentApps: apps,
-                currentHosts: hosts,
-                showSelectOptions: utils.showSelectOptions,
-                currentLevels: levels,
-                currentStartDate: startDate,
-                currentEndDate: endDate,
-                refreshTime: webConfig.refresh_time
+                currentApps: self.queryApps(query),
+                currentHosts: self.queryHosts(query),
+                currentLevels: self.queryLevels(query),
+                currentStartDate: self.queryStartDate(query),
+                currentEndDate: self.queryEndDate(query),
+                refreshTime: webConfig.refresh_time,
+
+                # helper functions from utils
+                utils: utils
               }
 
+  routeNewlogs: (app) ->
+    self = this
     app.get '/newlogs', (req, res) ->
-      query = req.query
-      apps = query.apps || []
-      hosts = query.hosts || []
-      levels = query.levels || []
-      conditions = {}
-      conditions['app'] = {$in: apps} if apps.length > 0
-      conditions['hostname'] = {$in: hosts} if hosts.length > 0
-      conditions['level'] = {$in: level} if levels.length > 0
-      conditions['time'] = {$gt: +req.query.time}
+      conditions = self.buildConditions req.query
       app.get('db').find(conditions).sort({time: -1}).toArray (err, docs) ->
         console.log "[#{new Date()}] MongoDB error: #{err}" if err
         res.render 'logs', {
           docs: docs,
+          utils: utils
         }
 
+  routeApi: (app) ->
     app.post '/api/:api_key', (req, res) ->
       res.set('Content-Type', 'text/plain')
       if req.params.api_key != app.get('config').api_key
@@ -106,9 +133,6 @@ class Server
       console.log doc
       app.get('db').insert doc
       res.send "OK"
-
-    console.log "elog-server is running at #{@config.http.port}"
-    @app = app.listen(@config.http.port, @config.http.host)
 
   shutdown: () ->
     console.log "Closing server."

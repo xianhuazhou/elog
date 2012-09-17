@@ -33,7 +33,7 @@ describe 'Utils', ->
       currentApps = [3]
       name = 'Level'
       selectOptions = utils.showSelectOptions(name, allApps, currentApps, (levelId) ->
-        elog.getLevelById(levelId)
+        utils.getLevelById(levelId)
       )
       selectOptions.should.include '>Fatal<'
       selectOptions.should.include '>Error<'

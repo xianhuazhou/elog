@@ -15,14 +15,14 @@
                 <option value="<%= limitOptions[i] %>"<%= selected %>><%= limitOptions[i] %></option>
             <% } %>
             </select> rows per page in 
-            <%- showSelectOptions('apps', allApps, currentApps) %> and
-            <%- showSelectOptions('hosts', allHosts, currentHosts) %> and
-            <%- showSelectOptions('levels', allLevels, currentLevels) %>
+            <%- utils.showSelectOptions('hosts', allHosts, currentHosts) %> and
+            <%- utils.showSelectOptions('apps', allApps, currentApps) %> and
+            <%- utils.showSelectOptions('levels', allLevels, currentLevels, function(levelId){ return utils.getLevelById(levelId); }) %>
+
             during <input type="text" name="startDate" value="<%= currentStartDate %>" placeholder="start date/time" title="Format: xxxx-xx-xx or xxxx-xx-xx hh:ss:mm"> and 
             <input type="text" name="endDate" value="<%= currentEndDate %>" placeholder="end date/time" title="Format: xxxx-xx-xx or xxxx-xx-xx hh:ss:mm">
             ,
             <input type="submit" value="Filter Logs" class="button">
-           </select>
         </form>
         <table cellspacing="1" cellpadding="3" id="logs">
             <tr id="logsHeader">
@@ -43,8 +43,9 @@
             $(function(){
                 elog({
                     refresh_time: <%= refreshTime %>,
+                    current_hosts: <%- JSON.stringify(currentHosts) %>,
                     current_apps: <%- JSON.stringify(currentApps) %>,
-                    current_hosts: <%- JSON.stringify(currentHosts) %>
+                    current_levels: <%- JSON.stringify(currentLevels) %>
                 });
             });
         </script>
