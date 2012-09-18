@@ -64,6 +64,9 @@ utils = {
       line = line.replace(reg, '')
 
     line
+
+  # limit number of rows per page
+  limitOptions: [10, 30, 50, 100, 200, 500, 1000, 2000, 10000]
 }
 
 exports.utils = utils
