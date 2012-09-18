@@ -9,7 +9,7 @@ exports.elog = {
   LOG_INFO: 1,
   LOG_DEBUG: 0,
 
-  VERSION: "0.0.2",
+  VERSION: "0.1.0-dev",
 
   db: require('./db.coffee').db,
   client: require('./client.coffee').client,
