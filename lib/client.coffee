@@ -91,7 +91,7 @@ class Client
       console.log "[#{new Date().toString()}] elog-server error: #{error}"
 
     hr.write data
-    hr.end() 
+    hr.end()
 
   # get time of one line log 
   getTimeOf: (line) ->

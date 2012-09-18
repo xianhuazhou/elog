@@ -194,17 +194,20 @@ class Server
       self.myDB.insert doc
       res.send "OK"
 
+  # show top logs
   routeToplogs: (app) ->
     self = this
     app.get '/toplogs', (req, res) ->
       self.showLogs req, res, true
 
+  # render templates with layout
   renderWithLayout: (res, template, params) ->
     res.render template, params, (err, body) ->
       layoutParams = params
       layoutParams['body'] = body
       res.render 'layout', layoutParams
 
+  # shutdown the web server
   shutdown: () ->
     console.log "Closing server."
     @app.close()

@@ -1,7 +1,7 @@
 Introduction
 ------------
 
-elog can find and filter specified error logs from your applications, web servers and any other text based log files, store the logs into [MongoDB](http://mongodb.org). Then you can access the logs from MongoDB via a web interface with some filter options.
+elog can find and filter specified error logs from your applications, web servers and any other text based log files, store the logs into [MongoDB](http://mongodb.org) (&gt;= 2.1.0). Then you can access the logs from MongoDB via a web interface with some filter options.
 
 elog contains elog-client and elog-server,  elog-client can filter and push logs to elog-server via http requests, elog-server is a kind of web server with [expressjs](http://expressjs.com). 
 
@@ -10,7 +10,7 @@ Quick Start
 
 ### Installation
 
-Before you start, you need to install [nodejs](http://nodejs.org) (&gt;= 0.8.8) and [CoffeeScript](http://coffeescript.org) (&gt;=1.3.3) in your Linux/Unix system, then install elog:
+Before you start, you need to install [nodejs](http://nodejs.org) (&gt;= 0.8.8), [MongoDB](http://mongodb.org) (&gt;= 2.1.0, for elog-server only) and [CoffeeScript](http://coffeescript.org) (&gt;=1.3.3) in your Linux/Unix system, then install elog:
 
     $ [sudo] npm -g install elog
 
@@ -137,6 +137,14 @@ In case if you changed some configuration, we can reload the settings without sh
     $ elog-client
     
 You can see all of available commands.
+
+## update from v0.0.2 to v0.1.0
+
+You need to update elog-server:
+
+    $ elog-server /etc/elog/server.json update all
+
+To see all of update options, run "elog-server --help".
 
 ## Tips
 
