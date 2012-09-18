@@ -36,24 +36,38 @@ exports.elog = {
     )
     process.exit 0
 
-  updateServer: (config) ->
+  updateServer: (config, action) ->
+    possibleActions = ['all', 'indexes', 'dupid']
+    if possibleActions.indexOf(action) is -1
+      console.log "Invalid update action given: #{action}"
+      console.log "Possible actions are #{possibleActions.join ', '}"
+      process.exit -1
+
     console.log "Updating elog-server ..."
+
     cfg = config.mongodb
     utils = this.utils
+
     myDB = new this.db(cfg.host, cfg.port, cfg.database, cfg.collection, false)
     myDB.open (collection, db) ->
       collection = db.collection(cfg.collection)
-      console.log "   >> updating indexes"
-      myDB.createIndexes()
-      collection.find().toArray (err, docs) ->
-        console.log "   >> updating dupids for show top X errors"
-        for doc in docs
-          return unless doc
-          updatedData = {dupid: utils.md5(utils.trimLineTime(doc.msg))}
-          collection.update({_id: doc._id}, {$set: updatedData})
+      if action is 'all' or action is 'indexes'
+        console.log "   >> updating indexes"
+        myDB.createIndexes()
 
-        console.log ""
-        console.log "elog-server has been updated."
+      if action is 'all' or action is 'dupid'
+        collection.find().toArray (err, docs) ->
+          db.close()
+          console.log "   >> updating dupid for show top X errors"
+          for doc in docs
+            return unless doc
+            return if doc.dupid
+            console.log "processing log #{doc._id}"
+            updatedData = {dupid: utils.md5(utils.trimLineTime(doc.msg))}
+            collection.update({_id: doc._id}, {$set: updatedData})
+          process.exit 0
+      else
+        db.close()
         process.exit 0
 
   reload: (program) ->

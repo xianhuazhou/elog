@@ -6,7 +6,7 @@ os = require 'os'
 TMP_POSITION_FILE = "elog.positions.json"
 positionFile = os.tmpDir() + "/#{TMP_POSITION_FILE}"
 
-unless process.argv[2]
+if not process.argv[2] or process.argv[2].indexOf('help') != -1
   console.log "elog-client can filter logs and send them to elog-server."
   console.log "usage: elog-client /path/to/your/client.json # start elog-client"
   console.log ""

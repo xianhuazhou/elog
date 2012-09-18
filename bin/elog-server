@@ -1,7 +1,7 @@
 #!/usr/bin/env coffee
 elog = require(__dirname + '/../lib/elog.coffee').elog
 
-unless process.argv[2]
+if not process.argv[2] or process.argv[2].indexOf('help') != -1
   console.log "elog-server can receive logs and store them into MongoDB, you can see the logs via web browsers."
   console.log "e.g. http://localhost:3339"
   console.log ""
@@ -9,7 +9,10 @@ unless process.argv[2]
   console.log "       elog-server reload # reload configuration"
   console.log "       elog-server stop # stop the current running process"
   console.log "       elog-server show-config # show the default configuration"
-  console.log "       elog-server /path/to/server/config.json update# update your elog server settings"
+  console.log "       elog-server /path/to/server/config.json update <all|indexes|dupid># update your elog server settings"
+  console.log "                                                      all: update all possible changes"
+  console.log "                                                      indexes: update indexes of MongoDB"
+  console.log "                                                      dupid:  update dupid (since v0.1.0)"
   console.log ""
   elog.showVersion() 
 
@@ -20,7 +23,7 @@ configFile = argv2
 
 # update elog-server
 if process.argv[3] is 'update' 
-  elog.updateServer(require(configFile, true))
+  elog.updateServer(require(configFile, true), process.argv[4])
   return
 
 # run server
