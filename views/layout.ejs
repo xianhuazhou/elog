@@ -1,0 +1,53 @@
+<% var limitOptions = utils.limitOptions %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" media="all" type="text/css" href="/css/elog.css">
+  </head>
+  <body>
+    <h2>
+    <% if (pagePath == '/') { %>
+      Logs list
+    <% } else {%>
+      Top <%= Math.min(currentLimit, docs.length) %> logs list
+    <% } %>
+    </h2>
+    <form action="<%= pagePath %>" method="get" id="filterForm">
+       Show <select size="1" name="limit">
+        <% for (var i = 0; i < limitOptions.length; i++) { %>
+            <% var selected = limitOptions[i] == currentLimit ? ' selected="selected"' : '' %>
+            <option value="<%= limitOptions[i] %>"<%= selected %>><%= limitOptions[i] %></option>
+        <% } %>
+        </select> rows per page in 
+        <%- utils.showSelectOptions('hosts', allHosts, currentHosts) %> and
+        <%- utils.showSelectOptions('apps', allApps, currentApps) %> and
+        <%- utils.showSelectOptions('levels', allLevels, currentLevels, function(levelId){ return utils.getLevelById(levelId); }) %>
+        during <input type="text" name="startDate" value="<%= currentStartDate %>" placeholder="start date/time" title="Format: xxxx-xx-xx or xxxx-xx-xx hh:ss:mm"> and 
+        <input type="text" name="endDate" value="<%= currentEndDate %>" placeholder="end date/time" title="Format: xxxx-xx-xx or xxxx-xx-xx hh:ss:mm">
+        ,
+        <input type="submit" value="Filter Logs" class="button" id="btnFilterLogs">
+        or
+        <input type="submit" value="Filter Top Logs" class="button" id="btnFilterTopLogs">
+    </form>
+    <%- body %>
+    <div id="footer">
+       &copy;elog <%= new Date() %>
+    </div>
+    <script type="text/javascript" src="/js/jquery-1.8.1.min.js"></script>
+    <script type="text/javascript" src="/js/elog.js"></script>
+    <% if (typeof refreshTime != 'undefined') { %>
+      <script>
+          $(function(){
+              elog({
+                  refresh_time: <%= refreshTime %>,
+                  current_hosts: <%- JSON.stringify(currentHosts) %>,
+                  current_apps: <%- JSON.stringify(currentApps) %>,
+                  current_levels: <%- JSON.stringify(currentLevels) %>
+              });
+          });
+      </script>
+    <% } %>
+  </body>
+</html>

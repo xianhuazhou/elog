@@ -1,53 +1,10 @@
-<% var limitOptions = utils.limitOptions; %>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title><%= title %></title>
-        <link rel="stylesheet" media="all" type="text/css" href="/css/elog.css">
-    </head>
-    <body>
-        <h2>Logs list</h2>
-        <form action="/" method="get">
-           Show <select size="1" name="limit">
-            <% for (var i = 0; i < limitOptions.length; i++) { %>
-                <% var selected = limitOptions[i] == currentLimit ? ' selected="selected"' : '' %>
-                <option value="<%= limitOptions[i] %>"<%= selected %>><%= limitOptions[i] %></option>
-            <% } %>
-            </select> rows per page in 
-            <%- utils.showSelectOptions('hosts', allHosts, currentHosts) %> and
-            <%- utils.showSelectOptions('apps', allApps, currentApps) %> and
-            <%- utils.showSelectOptions('levels', allLevels, currentLevels, function(levelId){ return utils.getLevelById(levelId); }) %>
-
-            during <input type="text" name="startDate" value="<%= currentStartDate %>" placeholder="start date/time" title="Format: xxxx-xx-xx or xxxx-xx-xx hh:ss:mm"> and 
-            <input type="text" name="endDate" value="<%= currentEndDate %>" placeholder="end date/time" title="Format: xxxx-xx-xx or xxxx-xx-xx hh:ss:mm">
-            ,
-            <input type="submit" value="Filter Logs" class="button">
-        </form>
-        <table cellspacing="1" cellpadding="3" id="logs">
-            <tr id="logsHeader">
-                <th class="time">Time</th>
-                <th class="host">Host</th>
-                <th class="app">App</th>
-                <th class="level">Level</th>
-                <th class="message">Message</th>
-            </tr> 
-            <% include logs %>
-        </table>
-        <div id="footer">
-           &copy;elog <%= new Date() %>
-        </div>
-        <script type="text/javascript" src="/js/jquery-1.8.1.min.js"></script>
-        <script type="text/javascript" src="/js/elog.js"></script>
-        <script>
-            $(function(){
-                elog({
-                    refresh_time: <%= refreshTime %>,
-                    current_hosts: <%- JSON.stringify(currentHosts) %>,
-                    current_apps: <%- JSON.stringify(currentApps) %>,
-                    current_levels: <%- JSON.stringify(currentLevels) %>
-                });
-            });
-        </script>
-    </body>
-</html>
+<table cellspacing="1" cellpadding="3" id="logs">
+    <tr id="logsHeader">
+        <th class="time">Time</th>
+        <th class="host">Host</th>
+        <th class="app">App</th>
+        <th class="level">Level</th>
+        <th class="message">Message</th>
+    </tr> 
+    <% include logs %>
+</table>

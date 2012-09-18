@@ -2,4 +2,5 @@
 /tmp
 /t/*
 *.swp
+test.coffee
 node_modules/

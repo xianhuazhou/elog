@@ -1,0 +1,18 @@
+<table cellspacing="1" cellpadding="3" id="logs">
+  <tr>
+    <th>Hostname</th>
+    <th>App</th>
+    <th>Level</th>
+    <th>Log</th>
+    <th>Count</th>
+  </tr>
+  <% docs.forEach(function(doc){ %> 
+      <tr class="level<%= doc.level %>">
+          <td><%= doc.hostname %></td>
+          <td><%= doc.app %></td>
+          <td><%= utils.getLevelById(doc.level[0]) %></td>
+          <td><%= doc.msg[0] %></td>
+          <td><%= doc.count %></td>
+      </tr>
+  <% }) %>
+</table>

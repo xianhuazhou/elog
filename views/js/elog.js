@@ -23,4 +23,14 @@ $(function() {
             updateLogs(options);
         }, options.refresh_time);
     }
+
+    $('#btnFilterLogs').click(function(e){
+        e.preventDefault();
+        $('#filterForm').attr('action', '/').submit();
+    });
+
+    $('#btnFilterTopLogs').click(function(e){
+        e.preventDefault();
+        $('#filterForm').attr('action', '/toplogs').submit();
+    });
 });
