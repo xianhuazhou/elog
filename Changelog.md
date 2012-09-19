@@ -1,3 +1,11 @@
+0.1.0 / 2012-09-19
+===================
+
+* Added top logs (MongoDB v2.1.0 required)
+* Added filter "Levels"
+* Fixed app rules 
+* Updated views with layout
+
 0.0.2 / 2012-09-05
 ===================
 
