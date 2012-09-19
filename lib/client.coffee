@@ -82,12 +82,14 @@ class Client
         'Content-Length': data.length
       }
     }
+    self = this
     hr = http.request http_options, (res) ->
       res.setEncoding('utf8')
       res.on 'data', (chunk) ->
         console.log chunk if chunk != 'OK'
 
     hr.on 'error', (error) ->
+      self.currentPosition -= line.length + 1
       console.log "[#{new Date().toString()}] elog-server error: #{error}"
 
     hr.write data
