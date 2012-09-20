@@ -12,6 +12,7 @@ if not process.argv[2] or process.argv[2].indexOf('help') != -1
   console.log ""
   console.log "       elog-client reset-positions # reset all positions of logs"
   console.log "       elog-client reload # reload configuration"
+  console.log "       elog-client stop # stop it"
   console.log "       elog-client show-config # show the default configuration"
   console.log ""
   elog.showVersion() 

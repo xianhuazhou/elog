@@ -8,6 +8,7 @@ if not process.argv[2] or process.argv[2].indexOf('help') != -1
   console.log "Usage: elog-server /path/to/server/config.json # start elog-server"
   console.log "       elog-server reload # reload configuration"
   console.log "       elog-server stop # stop the current running process"
+  console.log "       elog-server stop # stop it"
   console.log "       elog-server show-config # show the default configuration"
   console.log "       elog-server /path/to/server/config.json update <all|indexes|dupid># update your elog server settings"
   console.log "                                                      all: update all possible changes"
