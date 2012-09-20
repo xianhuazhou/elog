@@ -11,7 +11,7 @@
                     ["Notice", "LOG_WARN"]
                 ],
                 "exclude": ["Primary script unknown"]
-            },
+            }
         },
         {
             "name": "nginx",
@@ -23,7 +23,7 @@
                     ["error", "LOG_ERROR"],
                     ["alert", "LOG_WARN"]
                 ],
-                "exclude": [""]
+                "exclude": []
             }
         }
     ],

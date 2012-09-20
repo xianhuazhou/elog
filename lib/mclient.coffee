@@ -20,7 +20,7 @@ class MClient
   filterLine: (line, rules) ->
     if rules.exclude
       for exclude in rules.exclude
-        return null if this.createRegexp(exclude).test(line)
+        return null if exclude and this.createRegexp(exclude).test(line)
 
     unless rules.include
       console.log "[#{new Date()}] No \"include\" rules found."
