@@ -20,7 +20,7 @@
             <% var selected = limitOptions[i] == currentLimit ? ' selected="selected"' : '' %>
             <option value="<%= limitOptions[i] %>"<%= selected %>><%= limitOptions[i] %></option>
         <% } %>
-        </select> rows per page in 
+        </select> rows in 
         <%- utils.showSelectOptions('hosts', allHosts, currentHosts) %> and
         <%- utils.showSelectOptions('apps', allApps, currentApps) %> and
         <%- utils.showSelectOptions('levels', allLevels, currentLevels, function(levelId){ return utils.getLevelById(levelId); }) %>
