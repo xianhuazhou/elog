@@ -9,6 +9,10 @@ input {
 input.button {
     width: 110px;
 }
+input#reset {
+    width: 50px;
+    color: #223322;
+}
 
 form {
     margin: auto;

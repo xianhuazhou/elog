@@ -33,4 +33,9 @@ $(function() {
         e.preventDefault();
         $('#filterForm').attr('action', '/toplogs').submit();
     });
+
+    $('#reset').click(function(e){
+        e.preventDefault();
+        window.location.href = '/';
+    });
 });
